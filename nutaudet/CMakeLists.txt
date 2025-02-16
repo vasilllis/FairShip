@@ -33,6 +33,11 @@ EmulsionMagnet.cxx
 TargetPoint.cxx
 TargetTracker.cxx
 TTPoint.cxx
+DetectorAssembly.cxx          
+MagnetisedIronLayer.cxx       
+SegmentedSciFiLayer.cxx  
+TargetGeometry.cxx       
+SegmentedScintillatorLayer.cxx  
 )
 
 Set(HEADERS )
