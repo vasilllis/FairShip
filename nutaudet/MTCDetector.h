@@ -1,13 +1,15 @@
 #ifndef MTCDETECTOR_H
 #define MTCDETECTOR_H
 
-#include "FairDetector.h"     // Base detector class from FairShip
-#include "TClonesArray.h"     // For storing hit points
-#include "TVector3.h"
-#include "TLorentzVector.h"
+// Standard FairRoot and ROOT includes (as used in FairShip)
+#include "FairDetector.h"      // Base class for detectors
+#include "TClonesArray.h"      // For storing hit points
+#include "TVector3.h"          // For positions
+#include "TLorentzVector.h"    // For momenta
+#include "TString.h"           // For string names
 
-// Forward declaration for the hit point class (implement similar to ShipRpcPoint)
-class MTCDetectorPoint;
+// Forward declaration for our hit point class (complete definition must be provided in MTCDetectorPoint.h)
+//class MTCDetectorPoint;
 
 class MTCDetector : public FairDetector {
 public:
@@ -17,9 +19,7 @@ public:
   virtual ~MTCDetector();
 
   /**
-   * Set all detector parameters.
-   * All dimensions are in centimeters.
-   *
+   * Set all detector parameters (all dimensions in centimeters):
    * @param width         Active area width (e.g. 50 cm)
    * @param height        Active area height (e.g. 50 cm)
    * @param ironThick     Thickness of the magnetised iron layer (e.g. 5 cm)
@@ -34,12 +34,12 @@ public:
 
   /**
    * Constructs the complete detector geometry.
-   * This method builds a sandwich of nLayers.
-   * Each sandwich unit consists of:
-   *   • A magnetised iron layer (with a 1.7 T field along the y axis)
-   *   • A segmented SciFi layer (built as a 50×50 cm² box subdivided into 1×1 cm cells)
-   *   • A segmented scintillator layer (similarly segmented)
-   * Finally, the entire assembly is shifted to the global z position.
+   * The detector is built as an envelope (a TGeoBBox) into which we place nLayers
+   * of sandwich units. Each sandwich unit consists of:
+   *   - A magnetised iron layer (with a uniform 1.7 T field along y applied in simulation)
+   *   - A segmented SciFi layer (active area subdivided into 1×1 cm cells)
+   *   - A segmented scintillator layer (also subdivided into 1×1 cm cells)
+   * For placements we use TGeoTranslation objects (declared in TGeoMatrix.h).
    */
   virtual void ConstructGeometry();
 
@@ -50,23 +50,23 @@ public:
   virtual TClonesArray* GetCollection(Int_t iColl) const;
   virtual void Reset();
 
-  // Example method to add a hit point (if needed)
-  MTCDetectorPoint* AddHit(Int_t trackID, Int_t detID,
-                           TVector3 pos, TVector3 mom,
-                           Double_t time, Double_t length,
-                           Double_t eLoss, Int_t pdgCode);
+  // Example method to add a hit point.
+  //MTCDetectorPoint* AddHit(Int_t trackID, Int_t detID,
+           //                TVector3 pos, TVector3 mom,
+           //                Double_t time, Double_t length,
+           //                Double_t eLoss, Int_t pdgCode);
 
 private:
-  // Detector parameters (in centimeters)
+  // Detector parameters (all in centimeters)
   Double_t fWidth;       // Active area width
   Double_t fHeight;      // Active area height
-  Double_t fIronThick;   // Magnetised iron layer thickness
+  Double_t fIronThick;   // Magnetised iron thickness
   Double_t fSciFiThick;  // SciFi layer thickness
   Double_t fScintThick;  // Scintillator layer thickness
   Int_t    fLayers;      // Number of sandwich layers
   Double_t fZCenter;     // Global z placement
 
-  // Collection for hit points
+  // Collection for hit points.
   TClonesArray* fMTCDetectorPointCollection;
 
   // Copy constructor and assignment operator (not implemented)
