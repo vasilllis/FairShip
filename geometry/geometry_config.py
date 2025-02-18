@@ -68,6 +68,18 @@ with ConfigRegistry.register_config("basic") as c:
     c.DecayVolumeMedium = DecayVolumeMedium
     c.SND = SND
 
+    c.MTC = AttrDict(
+        width=50 * u.cm,          # Active area width
+        height=50 * u.cm,         # Active area height
+        ironThick=5 * u.cm,       # Magnetised iron thickness
+        sciFiThick=0.5 * u.cm,    # SciFi layer thickness
+        scintThick=2 * u.cm,      # Scintillator layer thickness
+        nLayers=50,               # Number of sandwich layers
+        zPosition=-3500 * u.cm,   # Global z position
+        fieldY=1.7 * u.tesla,     # Magnetic field strength (Y-axis)
+        isActive=True             # Activation flag
+    )
+
     c.SC_mag = SC_mag
     c.scName = scName
     # global muShieldDesign, targetOpt, strawDesign, Yheight

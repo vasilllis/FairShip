@@ -685,6 +685,26 @@ def configure(run, ship_geo):
                     tauHpt.GetNumberofTargets(ship_geo.NuTauTarget.target)
                 detectorList.append(tauHpt)
 
+
+        # ======================== MTC Detector Setup ========================
+    if hasattr(ship_geo, 'MTC') and ship_geo.MTC.isActive:
+        from ROOT import MTCDetector
+        
+        # Initialize detector
+        mtc = MTCDetector("MTC", ship_geo.MTC.zPosition, ROOT.kTRUE)
+        mtc.SetMTCParameters(
+            ship_geo.MTC.width,
+            ship_geo.MTC.height,
+            ship_geo.MTC.ironThick,
+            ship_geo.MTC.sciFiThick,
+            ship_geo.MTC.scintThick,
+            ship_geo.MTC.nLayers,
+            ship_geo.MTC.zPosition,
+            ship_geo.MTC.fieldY
+        )
+        detectorList.append(mtc)
+
+
     # for backward compatibility
     if not hasattr(ship_geo.strawtubes, "YPlaneOffset"):
         ship_geo.strawtubes.YLayerOffset = ship_geo.strawtubes.StrawPitch / 2.0
